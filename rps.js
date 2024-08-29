@@ -1,85 +1,133 @@
 console.log("Rock Paper Scissors!");
 
+// create scores var
 let humanScore = 0;
 let computerScore = 0;
+let humanChoice = "";
 
+// create element var
+let scoreCounter = document.querySelector("#score");
+let resultText = document.querySelector("#result");
+let buttons = document.querySelector(".button-container");
+let cpuScoreText = document.querySelector("#cpu-score");
+let humScoreText = document.querySelector("#hum-score");
+
+// create try again button
+const tryAgainBtn = document.createElement("button");
+tryAgainBtn.textContent = "Try Again?";
+tryAgainBtn.style.cssText = "text-align:center;padding:24px;flex-grow:0;"
+
+// get computer choice fxn
 function getComputerChoice() {
     switch(Math.floor(Math.random() * (3) + 1)) {
         case 1: return "rock";
         case 2: return "paper";
         case 3: return "scissors";
-        default: return "none!"
     }
 }
 
-function getHumanChoice() {
-    return prompt("What is your move?").toLowerCase();
-}
+// on user click of choice
+buttons.addEventListener("click", (event) => {
+    event.stopImmediatePropagation(); 
+    // get human choice
+    switch (event.target.id) {
+        case "rock-btn":
+            console.log("rock was selected");
+            humanChoice = "rock";
+            break;
+        case "paper-btn":
+            console.log("paper was selected");
+            humanChoice = "paper";
+            break;
+        case "scissors-btn":
+            console.log("scissors was selected");      
+            humanChoice = "scissors";  
+            break;
+    }
 
-function playRound(humanChoice, computerChoice) {
-    const WIN = `You win! Your ${humanChoice} beats their ${computerChoice}.`;
-    const LOSE = `You lose! Their ${computerChoice} beats your ${humanChoice}.`;
-    const TIE = `Tie! Your ${computerChoice} is the same as their ${humanChoice}.`;
+    // get computer choice
+    let computerChoice = getComputerChoice();
+
+    // choose winner and update score
     switch(humanChoice) {
         case "rock":
-            if (computerChoice === "rock") {
-                console.log(TIE);
-            }
-            if (computerChoice === "paper") {
-                console.log(WIN);
-                humanScore++;
-            }
-            if (computerChoice === "scissors") {
-                console.log(LOSE);
-                computerScore++;
+            switch (computerChoice) {
+                case "rock":
+                    resultText.textContent = "TIE! Both chose rock.";
+                    break;
+                case "paper":
+                    resultText.textContent = "LOSE! CPU chose paper.";
+                    computerScore++;
+                    break;
+                case "scissors":
+                    resultText.textContent = "WIN! CPU chose scissors.";
+                    humanScore++;
+                    break;
             }
             break;
         case "paper":
-            if (computerChoice === "rock") {
-                console.log(LOSE);
-                computerScore++;
-            }
-            if (computerChoice === "paper") {
-                console.log(TIE);
-            }
-            if (computerChoice === "scissors") {
-                console.log(WIN);
-                humanScore++;
-            }
+            switch (computerChoice) {
+                case "paper":
+                    resultText.textContent = "TIE! Both chose paper.";
+                    break;
+                case "scissors":
+                    resultText.textContent = "LOSE! CPU chose scissors.";
+                    computerScore++;
+                    break;
+                case "rock":
+                    resultText.textContent = "WIN! CPU chose rock.";
+                    humanScore++;
+                    break;
+             }
             break;
         case "scissors":
-            if (computerChoice === "rock") {
-                console.log(LOSE);
-                computerScore++;
-            }
-            if (computerChoice === "paper") {
-                console.log(WIN);
-                humanScore++;
-            }
-            if (computerChoice === "scissors") {
-                console.log(TIE);
+            switch (computerChoice) {
+                case "scissors":
+                    resultText.textContent = "TIE! Both chose scissors.";
+                    break;
+                case "rock":
+                    resultText.textContent = "LOSE! CPU chose rock.";
+                    computerScore++;
+                    break;
+                case "paper":
+                    resultText.textContent = "WIN! CPU chose paper.";
+                    humanScore++;
+                    break;
             }
             break;
-    }
-}
-
-function playGame() {
-    for (let i  = 0; i < 5; i++) {
-        let humanSelection = getHumanChoice();
-        let computerSelection = getComputerChoice();
-        playRound(humanSelection,computerSelection);
-    }
-    if (computerScore > humanScore) {
-        console.log("You lost the game, better luck next time!")
-        console.log(`You: ${humanScore}`);
-        console.log(`CPU: ${computerScore}`);
-    } 
-    else {
-        console.log("You win the game!")
-        console.log(`You: ${humanScore}`);
-        console.log(`CPU: ${computerScore}`);
+        default:
+            break;
     }
 
-}
+    // update score on DOM
+    cpuScoreText.textContent = `CPU: ${computerScore}`;
+    humScoreText.textContent = `You: ${humanScore}`;
 
-playGame();
+    // declare winner on score of 5 and show try again
+    if (computerScore == 5 || humanScore == 5) {
+        if (computerScore > humanScore) {
+            resultText.textContent = "You lose the game!"
+        }
+        else if (computerScore < humanScore) {
+            resultText.textContent = "You win the game!"
+        }
+        else {
+            resultText.textContent = "Tie!"
+        }
+        buttons.remove();
+        document.body.appendChild(tryAgainBtn);
+    }
+
+})
+
+// reset game on try again click
+tryAgainBtn.addEventListener("click", () => {
+    console.log("try again clicked");
+    humanScore = 0;
+    computerScore = 0;
+    document.body.insertBefore(buttons,cpuScoreText);
+    tryAgainBtn.remove();
+    resultText.textContent = "";
+    cpuScoreText.textContent = `CPU: ${computerScore}`;
+    humScoreText.textContent = `You: ${humanScore}`;
+})
