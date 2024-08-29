@@ -19,13 +19,37 @@ h1 {
     align-items:stretch;
     padding:8px 48px;
     height:200px;
+    margin:48px 0px;
     gap:24px;
 }
 
 .button-container button {
     flex: 0 1 300px;
+    background-color:paleturquoise;
+    border-radius:10px;
+    border:none;
+    color:black;
+}
+
+.button-container button:hover {
+    background-color:lightblue;
+}
+.button-container button:active {
+    background-color:paleturquoise;
 }
 
 span {
     margin:8px;
+}
+
+.scores {
+    display:flex;
+    flex-direction: column;
+    align-items: left;
+    width:auto;
+
+    background-color:lightgray;
+    border-radius:10px;
+    color:black;
+    margin-bottom: 24px;
 }

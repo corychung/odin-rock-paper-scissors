@@ -7,6 +7,7 @@ let humanChoice = "";
 
 // create element var
 let scoreCounter = document.querySelector("#score");
+let scoreDiv = document.querySelector(".scores");
 let resultText = document.querySelector("#result");
 let buttons = document.querySelector(".button-container");
 let cpuScoreText = document.querySelector("#cpu-score");
@@ -42,6 +43,9 @@ buttons.addEventListener("click", (event) => {
         case "scissors-btn":
             console.log("scissors was selected");      
             humanChoice = "scissors";  
+            break;
+        default:
+            humanChoice = "";
             break;
     }
 
@@ -125,9 +129,10 @@ tryAgainBtn.addEventListener("click", () => {
     console.log("try again clicked");
     humanScore = 0;
     computerScore = 0;
-    document.body.insertBefore(buttons,cpuScoreText);
-    tryAgainBtn.remove();
-    resultText.textContent = "";
     cpuScoreText.textContent = `CPU: ${computerScore}`;
     humScoreText.textContent = `You: ${humanScore}`;
+    document.body.insertBefore(buttons,scoreDiv);
+    tryAgainBtn.remove();
+    resultText.textContent = "";
+    
 })
